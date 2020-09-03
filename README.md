@@ -1,3 +1,9 @@
+# Tradeshift Notes
+
+To build the ts version run `./gradlew clean build -x test` as our changes break the tests.
+
+**REMEMBER** if you are using this plugin in a new build of sonar the github alm uuid may be different and need to be changed. See: https://github.com/Tradeshift/sonarqube-community-branch-plugin/pull/1
+
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=mc1arke_sonarqube-community-branch-plugin&metric=alert_status)](https://sonarcloud.io/dashboard?id=mc1arke_sonarqube-community-branch-plugin)
 [![Build Status](https://img.shields.io/github/workflow/status/mc1arke/sonarqube-community-branch-plugin/build?label=build&logo=github)](https://github.com/mc1arke/sonarqube-community-branch-plugin?workflow=build)
 

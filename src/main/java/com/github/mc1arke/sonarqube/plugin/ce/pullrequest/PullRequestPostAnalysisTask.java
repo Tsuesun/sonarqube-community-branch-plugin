@@ -92,22 +92,18 @@ public class PullRequestPostAnalysisTask implements PostProjectAnalysisTask {
             return;
         }
 
-        ProjectAlmSettingDto projectAlmSettingDto;
+        ProjectAlmSettingDto projectAlmSettingDto = new ProjectAlmSettingDto();
         Optional<AlmSettingDto> optionalAlmSettingDto;
         try (DbSession dbSession = dbClient.openSession(false)) {
+            // ALM is different each time an ALM is created (in a new instance of sonar for example)
+            // The Uuid can be found in the sonar db by looking in `select uuid from alm_settings` AFTER configuring the github ALM
+            String almSettingUuid = "AXQiHUyxX0wsySB16M5j";
+            projectAlmSettingDto.setAlmRepo("Tradeshift/" + projectAnalysis.getProject().getKey());
+            projectAlmSettingDto.setAlmSettingUuid(almSettingUuid);
+            projectAlmSettingDto.setAlmSlug("");
+            projectAlmSettingDto.setProjectUuid(projectAnalysis.getProject().getUuid());
 
-            Optional<ProjectAlmSettingDto> optionalProjectAlmSettingDto =
-                    dbClient.projectAlmSettingDao().selectByProject(dbSession, projectAnalysis.getProject().getUuid());
-
-            if (!optionalProjectAlmSettingDto.isPresent()) {
-                LOGGER.debug("No ALM has been set on the current project");
-                return;
-            }
-
-            projectAlmSettingDto = optionalProjectAlmSettingDto.get();
-            String almSettingUuid = projectAlmSettingDto.getAlmSettingUuid();
             optionalAlmSettingDto = dbClient.almSettingDao().selectByUuid(dbSession, almSettingUuid);
-
         }
 
         if (!optionalAlmSettingDto.isPresent()) {
